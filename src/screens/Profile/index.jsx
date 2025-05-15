@@ -1,51 +1,68 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Edit } from 'iconsax-react-native';
 import { colors, fontType } from '../../theme';
 
 const Profile = () => {
+  const navigation = useNavigation();
+
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-      <Image
+    <View style={styles.wrapper}>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <Image
             source={require('../../assets/kevinsanjaya.jpg')}
             style={styles.profileImage}
-        />
-        <Text style={styles.name}>Kevin Sanjaya Sukamuljo</Text>
-        <Text style={styles.origin}>Indonesia</Text>
-        <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>Edit Profil</Text>
-        </TouchableOpacity>
-      </View>
+          />
+          <Text style={styles.name}>Kevin Sanjaya Sukamuljo</Text>
+          <Text style={styles.origin}>Indonesia</Text>
+          <TouchableOpacity style={styles.editButton}>
+            <Text style={styles.editButtonText}>Edit Profil</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.detailSection}>
-        <Text style={styles.sectionTitle}>Informasi Pribadi</Text>
-        <View style={styles.detailItem}>
-          <Text style={styles.label}>Tanggal Lahir:</Text>
-          <Text style={styles.value}>2 Agustus 1995</Text>
+        <View style={styles.detailSection}>
+          <Text style={styles.sectionTitle}>Informasi Pribadi</Text>
+          <View style={styles.detailItem}>
+            <Text style={styles.label}>Tanggal Lahir:</Text>
+            <Text style={styles.value}>2 Agustus 1995</Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Text style={styles.label}>Username:</Text>
+            <Text style={styles.value}>@kevinsj95</Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Text style={styles.label}>Alamat:</Text>
+            <Text style={styles.value}>Bandung, Jawa Barat</Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Text style={styles.label}>No. Telepon:</Text>
+            <Text style={styles.value}>+62 812 3456 7890</Text>
+          </View>
         </View>
-        <View style={styles.detailItem}>
-          <Text style={styles.label}>Username:</Text>
-          <Text style={styles.value}>@kevinsj95</Text>
-        </View>
-        <View style={styles.detailItem}>
-          <Text style={styles.label}>Alamat:</Text>
-          <Text style={styles.value}>Bandung, Jawa Barat</Text>
-        </View>
-        <View style={styles.detailItem}>
-          <Text style={styles.label}>No. Telepon:</Text>
-          <Text style={styles.value}>+62 812 3456 7890</Text>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+
+      {/* Tombol Mengambang untuk Add Blog */}
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={() => navigation.navigate('AddBlog')}
+      >
+        <Edit color={colors.white()} variant="Linear" size={20} />
+      </TouchableOpacity>
+    </View>
   );
 };
 
 export default Profile;
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
     backgroundColor: colors.white(),
+  },
+  container: {
+    flex: 1,
   },
   header: {
     alignItems: 'center',
@@ -108,5 +125,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fontType['Pjs-Medium'],
     color: colors.black(),
+  },
+  floatingButton: {
+    backgroundColor: colors.blue(),
+    padding: 15,
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    borderRadius: 10,
+    shadowColor: colors.blue(),
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
 });
