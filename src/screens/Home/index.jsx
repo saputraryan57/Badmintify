@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 
 const CategoryList = [
   {id: 1, categoryName: 'Training'},
@@ -57,46 +58,55 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>Badmintify 🏸</Text>
-          <Text style={styles.subtitle}>Temukan inspirasi badminton</Text>
-        </View>
+        <Animatable.View animation="fadeInUp" duration={600}>
+          {/* Header */}
+          <Animatable.View animation="fadeInDown" duration={600} style={styles.header}>
+            <Text style={styles.title}>Badmintify 🏸</Text>
+            <Text style={styles.subtitle}>Temukan inspirasi badminton</Text>
+          </Animatable.View>
 
-        {/* Search Bar */}
-        <View style={styles.searchBar}>
-          <Text style={styles.searchIcon}>🔍</Text>
-          <TextInput
-            placeholder="Cari tips badminton..."
-            value={search}
-            onChangeText={setSearch}
-            style={styles.searchInput}
-          />
-        </View>
-
-        {/* Kategori (horizontal scroll) */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoryScrollContainer}>
-          {CategoryList.map((cat, index) => (
-            <TouchableOpacity key={index} style={styles.categoryButton}>
-              <Text style={styles.categoryText}>{cat.categoryName}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-
-        {/* Blog List */}
-        {BlogList.map(item => (
-          <View key={item.id} style={styles.hobbyCard}>
-            <Image source={{uri: item.image}} style={styles.hobbyImage} />
-            <View style={styles.hobbyContent}>
-              <Text style={styles.hobbyCategory}>{item.category}</Text>
-              <Text style={styles.hobbyTitle}>{item.title}</Text>
-              <Text style={styles.hobbyDescription}>{item.description}</Text>
-            </View>
+          {/* Search Bar */}
+          <View style={styles.searchBar}>
+            <Text style={styles.searchIcon}>🔍</Text>
+            <TextInput
+              placeholder="Cari tips badminton..."
+              value={search}
+              onChangeText={setSearch}
+              style={styles.searchInput}
+            />
           </View>
-        ))}
+
+          {/* Kategori */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoryScrollContainer}
+          >
+            {CategoryList.map((cat, index) => (
+              <TouchableOpacity key={index} style={styles.categoryButton}>
+                <Text style={styles.categoryText}>{cat.categoryName}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          {/* Blog List */}
+          {BlogList.map(item => (
+            <Animatable.View
+              key={item.id}
+              style={styles.hobbyCard}
+              animation="fadeInUp"
+              delay={item.id * 100}
+              duration={600}
+            >
+              <Image source={{ uri: item.image }} style={styles.hobbyImage} />
+              <View style={styles.hobbyContent}>
+                <Text style={styles.hobbyCategory}>{item.category}</Text>
+                <Text style={styles.hobbyTitle}>{item.title}</Text>
+                <Text style={styles.hobbyDescription}>{item.description}</Text>
+              </View>
+            </Animatable.View>
+          ))}
+        </Animatable.View>
       </ScrollView>
     </View>
   );
