@@ -1,14 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { View, Text } from 'react-native'; // ⬅️ Tambahkan baris ini
+import { View, Text } from 'react-native';
 import { Home, Training, Profile, AddBlogForm } from '../screens';
 
-import {
-  Home2,
-  Ranking,
-  ProfileCircle,
-} from 'iconsax-react-native';
+import FormScreen from '../screens/Training/FormScreen';
+import EditFormScreen from '../screens/Training/EditFormScreen';
 
 import { fontType, colors } from '../theme';
 
@@ -84,6 +81,8 @@ const Router = () => {
   return (
     <Stack.Navigator initialRouteName="MainApp">
       <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }} />
+
+      {/* Halaman Tambah Blog (mungkin tidak perlu jika tidak digunakan) */}
       <Stack.Screen
         name="AddBlog"
         component={AddBlogForm}
@@ -93,6 +92,26 @@ const Router = () => {
           animationTypeForReplace: 'pop',
           gestureEnabled: true,
           gestureDirection: 'horizontal',
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
+
+      {/* ✅ Tambahan halaman Form dan EditForm untuk Training */}
+      <Stack.Screen
+        name="Form"
+        component={FormScreen}
+        options={{
+          title: 'Tambah Tips',
+          headerShown: true,
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
+      <Stack.Screen
+        name="EditForm"
+        component={EditFormScreen}
+        options={{
+          title: 'Edit Tips',
+          headerShown: true,
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />
