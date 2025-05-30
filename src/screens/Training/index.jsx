@@ -1,29 +1,33 @@
 // screens/Training/index.jsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Button, Alert, Image } from 'react-native';
-import axios from '../../api';
 import { colors, fontType } from '../../theme';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
+import { collection, getFirestore, onSnapshot, deleteDoc, doc } from '@react-native-firebase/firestore';
 
 const Training = () => {
   const [data, setData] = useState([]);
   const navigation = useNavigation();
 
-  const fetchData = async () => {
-    try {
-      const res = await axios.get('/articles');
-      setData(res.data);
-    } catch (err) {
-      Alert.alert('Gagal', 'Tidak bisa mengambil data.');
-    }
+  const fetchData = () => {
+    const db = getFirestore();
+    const unsub = onSnapshot(collection(db, 'trainings'), (snapshot) => {
+      const list = [];
+      snapshot.forEach((docSnap) => {
+        list.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      setData(list);
+    });
+
+    return unsub;
   };
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/articles/${id}`);
-      fetchData();
-    } catch {
+      const db = getFirestore();
+      await deleteDoc(doc(db, 'trainings', id));
+    } catch (err) {
       Alert.alert('Error', 'Gagal menghapus.');
     }
   };
@@ -40,7 +44,7 @@ const Training = () => {
           Training Tips
         </Animatable.Text>
 
-        {/* ✅ Konten Statis */}
+        {/* ✅ Konten statis */}
         <Animatable.View animation="fadeInUp" delay={200} duration={600} style={styles.section}>
           <Text style={styles.subtitle}>💥 Smash Kuat</Text>
           <Text style={styles.paragraph}>Smash adalah senjata utama dalam permainan badminton. Berikut beberapa latihan untuk meningkatkan kekuatan smash kamu:</Text>
@@ -63,7 +67,7 @@ const Training = () => {
           <Text style={styles.bullet}>• Latihan interval dengan shuttle run.</Text>
         </Animatable.View>
 
-        {/* ✅ Konten Dinamis dari API */}
+        {/* ✅ Konten dari Firestore */}
         {data.map((item, index) => (
           <Animatable.View
             key={item.id}
@@ -92,7 +96,7 @@ const Training = () => {
           </Animatable.View>
         ))}
 
-        {/* 🔽 Tombol Tambah di Bawah */}
+        {/* 🔽 Tombol Tambah */}
         <View style={{ marginTop: 30, marginBottom: 40 }}>
           <Button title="➕ Tambahkan Tips Baru" onPress={() => navigation.navigate('Form')} color="#4A90E2" />
         </View>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,9 +11,26 @@ import { useNavigation } from '@react-navigation/native';
 import { Edit } from 'iconsax-react-native';
 import { colors, fontType } from '../../theme';
 import * as Animatable from 'react-native-animatable';
+import { collection, getFirestore, onSnapshot, orderBy, query } from '@react-native-firebase/firestore';
 
 const Profile = () => {
   const navigation = useNavigation();
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    const db = getFirestore();
+    const q = query(collection(db, 'trainings'), orderBy('createdAt', 'desc'));
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const data = [];
+      snapshot.forEach(doc => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+      setHistory(data);
+    });
+
+    return () => unsub();
+  }, []);
 
   return (
     <View style={styles.wrapper}>
@@ -56,6 +73,26 @@ const Profile = () => {
               <Text style={styles.label}>No. Telepon:</Text>
               <Text style={styles.value}>+62 812 3456 7890</Text>
             </View>
+          </Animatable.View>
+
+          {/* Riwayat Training */}
+          <Animatable.View
+            animation="fadeInUp"
+            delay={400}
+            duration={600}
+            style={styles.detailSection}
+          >
+            <Text style={styles.sectionTitle}>Riwayat Tips yang Ditambahkan</Text>
+            {history.length === 0 ? (
+              <Text style={styles.label}>Belum ada tips ditambahkan.</Text>
+            ) : (
+              history.map((item, index) => (
+                <View key={item.id} style={styles.detailItem}>
+                  <Text style={styles.value}>📌 {item.title}</Text>
+                  <Text style={styles.label}>Kategori: {item.category}</Text>
+                </View>
+              ))
+            )}
           </Animatable.View>
         </Animatable.View>
       </ScrollView>

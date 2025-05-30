@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "295689780640",
+    "project_id": "badmintify",
+    "storage_bucket": "badmintify.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295689780640:android:d4bd215e9753a3d3aa78c5",
+        "android_client_info": {
+          "package_name": "com.woco"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjkf3ovT8gWtk2CyJChR_mCU6BHOizXpk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,8 +1,8 @@
 // src/screens/Training/EditFormScreen.jsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, Image } from 'react-native';
-import axios from '../../api';
 import { colors, fontType } from '../../theme';
+import { getFirestore, doc, updateDoc } from '@react-native-firebase/firestore';
 
 const EditFormScreen = ({ route, navigation }) => {
   const { article } = route.params;
@@ -18,20 +18,20 @@ const EditFormScreen = ({ route, navigation }) => {
     }
 
     try {
-      await axios.put(`/articles/${article.id}`, {
+      const db = getFirestore();
+      const docRef = doc(db, 'trainings', article.id);
+      await updateDoc(docRef, {
         title,
         category,
         description,
         image,
       });
+
       Alert.alert('Sukses', 'Tips latihan berhasil diperbarui.');
-      if (navigation.canGoBack()) {
-        navigation.goBack();
-      } else {
-        navigation.navigate('Training');
-      }
+      navigation.goBack();
     } catch (err) {
-      Alert.alert('Error', 'Gagal memperbarui data.');
+      console.error(err);
+      Alert.alert('Error', 'Gagal memperbarui data di Firebase.');
     }
   };
 

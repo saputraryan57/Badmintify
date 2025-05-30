@@ -1,8 +1,8 @@
 // src/screens/Training/FormScreen.jsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, Image } from 'react-native';
-import axios from '../../api';
 import { colors, fontType } from '../../theme';
+import { addDoc, collection, getFirestore } from '@react-native-firebase/firestore';
 
 const FormScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
@@ -16,20 +16,20 @@ const FormScreen = ({ navigation }) => {
     }
 
     try {
-      await axios.post('/articles', {
+      const db = getFirestore();
+      await addDoc(collection(db, 'trainings'), {
         title,
         category,
         description,
         image,
+        createdAt: new Date()
       });
+
       Alert.alert('Sukses', 'Tips latihan berhasil ditambahkan.');
-      if (navigation.canGoBack()) {
-        navigation.goBack();
-      } else {
-        navigation.navigate('Training');
-      }
+      navigation.goBack();
     } catch (err) {
-      Alert.alert('Error', 'Gagal menambahkan data.');
+      console.error(err);
+      Alert.alert('Error', 'Gagal menambahkan data ke Firebase.');
     }
   };
 
