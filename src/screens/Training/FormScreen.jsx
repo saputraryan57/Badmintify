@@ -1,8 +1,9 @@
-// src/screens/Training/FormScreen.jsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, Image } from 'react-native';
-import { colors, fontType } from '../../theme';
+import colors from '../../theme/colors';
+import fontType from '../../theme/fonts';
 import { addDoc, collection, getFirestore } from '@react-native-firebase/firestore';
+import { displayNotification } from '../utils/notification';
 
 const FormScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
@@ -25,6 +26,7 @@ const FormScreen = ({ navigation }) => {
         createdAt: new Date()
       });
 
+      await displayNotification('Tips Baru Ditambahkan', `"${title}" berhasil disimpan.`); 
       Alert.alert('Sukses', 'Tips latihan berhasil ditambahkan.');
       navigation.goBack();
     } catch (err) {
@@ -42,12 +44,14 @@ const FormScreen = ({ navigation }) => {
         style={styles.input}
         value={title}
         onChangeText={setTitle}
+        placeholderTextColor={colors.grey(0.6)}
       />
       <TextInput
         placeholder="Kategori"
         style={styles.input}
         value={category}
         onChangeText={setCategory}
+        placeholderTextColor={colors.grey(0.6)}
       />
       <TextInput
         placeholder="Deskripsi"
@@ -55,12 +59,14 @@ const FormScreen = ({ navigation }) => {
         value={description}
         onChangeText={setDescription}
         multiline
+        placeholderTextColor={colors.grey(0.6)}
       />
       <TextInput
         placeholder="URL Gambar"
         style={styles.input}
         value={image}
         onChangeText={setImage}
+        placeholderTextColor={colors.grey(0.6)}
       />
 
       {image ? (
@@ -81,11 +87,12 @@ const styles = StyleSheet.create({
   container: { padding: 20, flex: 1, backgroundColor: colors.white() },
   header: { fontSize: 20, fontFamily: fontType['Pjs-Bold'], marginBottom: 20, color: colors.black() },
   input: {
-    backgroundColor: colors.grey(0.1),
+    backgroundColor: colors.grey(),
     marginBottom: 15,
     padding: 12,
     borderRadius: 8,
     fontFamily: fontType['Pjs-Regular'],
+    color: colors.black(),
   },
   image: {
     width: '100%',

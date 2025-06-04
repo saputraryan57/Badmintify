@@ -1,8 +1,9 @@
-// src/screens/Training/EditFormScreen.jsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, Image } from 'react-native';
-import { colors, fontType } from '../../theme';
+import colors from '../../theme/colors';
+import fontType from '../../theme/fonts'; 
 import { getFirestore, doc, updateDoc } from '@react-native-firebase/firestore';
+import { displayNotification } from '../utils/notification';
 
 const EditFormScreen = ({ route, navigation }) => {
   const { article } = route.params;
@@ -27,6 +28,7 @@ const EditFormScreen = ({ route, navigation }) => {
         image,
       });
 
+      await displayNotification('Tips Diperbarui', `"${title}" berhasil diperbarui.`); // ⬅️ Notifikasi lokal
       Alert.alert('Sukses', 'Tips latihan berhasil diperbarui.');
       navigation.goBack();
     } catch (err) {
@@ -44,12 +46,14 @@ const EditFormScreen = ({ route, navigation }) => {
         style={styles.input}
         value={title}
         onChangeText={setTitle}
+        placeholderTextColor={colors.grey(0.6)}
       />
       <TextInput
         placeholder="Kategori"
         style={styles.input}
         value={category}
         onChangeText={setCategory}
+        placeholderTextColor={colors.grey(0.6)}
       />
       <TextInput
         placeholder="Deskripsi"
@@ -57,12 +61,14 @@ const EditFormScreen = ({ route, navigation }) => {
         value={description}
         onChangeText={setDescription}
         multiline
+        placeholderTextColor={colors.grey(0.6)}
       />
       <TextInput
         placeholder="URL Gambar"
         style={styles.input}
         value={image}
         onChangeText={setImage}
+        placeholderTextColor={colors.grey(0.6)}
       />
 
       {image ? (
@@ -88,6 +94,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     fontFamily: fontType['Pjs-Regular'],
+    color: colors.black(),
   },
   image: {
     width: '100%',
